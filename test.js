@@ -1,8 +1,6 @@
 const { assert } = require('chai');
 const ticTacToe = require('./app/tic_tac_toe');
 const perfectPlayer = require('./app/perfect_player');
-const controller = require('./app/controller');
-const PROMPTS = require('./app/prompts');
 
 /* *****************
 MODEL TESTS
@@ -252,54 +250,3 @@ describe('perfectPlayer.getBestMove()', () => {
     assert.isAtMost(perfectPlayer.getBestMove(game, JSON.parse(JSON.stringify(game))), 8);
   });
 });
-
-/* *****************
-CONTROLLER TESTS
-******************* */
-
-describe('controller.validateInput()', () => {
-  const game = [
-    {
-      moves: [1],
-      symbol: 'X',
-      isHuman: true,
-      isActive: true,
-    },
-    {
-      moves: [],
-      symbol: 'O',
-      isHuman: false,
-      isActive: false,
-    },
-  ];
-
-  let input = 'X';
-
-  let conditions = PROMPTS[3].conditions;
-
-  it('should return an error message if user enters same symbol for players one and two', () => {
-    assert.typeOf(controller.validateInput(game, conditions, input), 'string');
-  });
-  it('should return an error message if user enters more than one character for any option', () => {
-    input = 'XX';
-    assert.typeOf(controller.validateInput(game, conditions, input), 'string');
-  });
-  it('should return an error message if user enters a number value for a player symbol', () => {
-    input = '1';
-    assert.typeOf(controller.validateInput(game, conditions, input), 'string');
-  });
-  it('should return an error message if user enters a anything other than "y" or "n" for y/n PROMPTS', () => {
-    input = '1';
-    conditions = PROMPTS[0].conditions;
-    assert.typeOf(controller.validateInput(game, conditions, input), 'string');
-  });
-  it('should return an error message if user enters a board position that is already taken', () => {
-    conditions = PROMPTS[5].conditions;
-    assert.typeOf(controller.validateInput(game, conditions, input), 'string');
-  });
-  it('should return an error message if user enters a number outside the range of board spaces', () => {
-    input = '9';
-    assert.typeOf(controller.validateInput(game, conditions, input), 'string');
-  });
-});
-

@@ -1,8 +1,8 @@
+const prompt = require('prompt');
+const PROMPTS = require('./settings_prompts');
 const view = require('./view');
-const PROMPTS = require('./prompts');
 const { getBestMove } = require('./perfect_player');
 const {
-  initialGameState,
   defineSettings,
   generateNextGameState,
   getActivePlayer,
@@ -10,29 +10,8 @@ const {
   checkForGameOver,
 } = require('./tic_tac_toe');
 
-function validateInput(gameState, conditions, input) {
-  const invalidInput = conditions.find(condition => !condition.test(input, gameState));
-
-  // returns 'undefined' if input meets all conditions, else returns an error message
-  return invalidInput && invalidInput.message(input);
-}
-
-function promptUser(gameState, { prompt, conditions }, callback) {
-  view.promptUser(prompt);
-
-  process.stdin.once('data', (data) => {
-    const formatedData = data.toString().trim();
-    const errorMessage = validateInput(gameState, conditions, formatedData);
-
-    if (!errorMessage) {
-      console.clear();
-      callback(formatedData);
-    } else {
-      view.error(errorMessage);
-      promptUser(gameState, { prompt, conditions }, callback);
-    }
-  });
-}
+prompt.message = '';
+prompt.delimiter = '';
 
 function handleGameOver(gameState) {
   view.showBoard(gameState);
@@ -62,11 +41,27 @@ function handleComputerMove(gameState, playerSymbol) {
 }
 
 function handleHumanMove(gameState, playerSymbol) {
+  const schema = {
+    properties: {
+      move: {
+        description: 'Please choose an available space (Enter a number between 0 and 8)',
+        type: 'string',
+        conform: (data) => {
+          return data.length === 1
+          && /[0-8]/.test(data)
+          && !gameState[0].moves.includes(+data)
+          && !gameState[1].moves.includes(+data);
+        },
+        message: 'Please enter only a single number between 0 and 8. Also, please only select a space that is still available.',
+        required: true,
+        before: data => +data,
+      },
+    },
+  };
   view.activePlayer(playerSymbol);
 
-  promptUser(gameState, PROMPTS[5], (data) => {
-    const updatedState = generateNextGameState(gameState, +data);
-
+  prompt.get(schema, (err, result) => {
+    const updatedState = generateNextGameState(gameState, result.move);
     routeNextMove(updatedState);
   });
 }
@@ -84,22 +79,8 @@ function play(gameState) {
 }
 
 function setupGame() {
-  promptUser(initialGameState, PROMPTS[0], (firstPlayerIsHuman) => {
-    defineSettings(0, 'isHuman', firstPlayerIsHuman === 'y');
-    promptUser(initialGameState, PROMPTS[1], (firstPlayerSymbol) => {
-      defineSettings(0, 'symbol', firstPlayerSymbol);
-      promptUser(initialGameState, PROMPTS[2], (secondPlayerIsHuman) => {
-        defineSettings(1, 'isHuman', secondPlayerIsHuman === 'y');
-        promptUser(initialGameState, PROMPTS[3], (secondPlayerSymbol) => {
-          defineSettings(1, 'symbol', secondPlayerSymbol);
-          promptUser(initialGameState, PROMPTS[4], (player) => {
-            defineSettings(player === '1' ? 0 : 1, 'isActive', true);
-
-            play(initialGameState);
-          });
-        });
-      });
-    });
+  prompt.get(PROMPTS, (err, result) => {
+    play(defineSettings(result));
   });
 }
 
@@ -111,6 +92,5 @@ function initialize() {
 }
 
 module.exports = {
-  validateInput, // only exposed for testing purposes
   initialize,
 };

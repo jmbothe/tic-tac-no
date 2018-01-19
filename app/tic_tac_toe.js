@@ -1,23 +1,24 @@
 const WINNING_PATTERNS = require('./winning_patterns');
 
-// Don't actually need a board. Just need players' moves to test against winning patterns
-const initialGameState = [
-  {
-    moves: [],
-    symbol: null,
-    isHuman: null,
-    isActive: false,
-  },
-  {
-    moves: [],
-    symbol: null,
-    isHuman: null,
-    isActive: false,
-  },
-];
+function defineSettings(settings) {
+  // Don't actually need a board. Just need players' moves to test against winning patterns
+  const initialGameState = [
+    {
+      moves: [],
+      symbol: settings.firstPlayerSymbol,
+      isHuman: settings.firstPlayerIsHuman,
+      isActive: false,
+    },
+    {
+      moves: [],
+      symbol: settings.secondPlayerSymbol,
+      isHuman: settings.secondPlayerIsHuman,
+      isActive: false,
+    },
+  ];
 
-function defineSettings(player, key, value) {
-  initialGameState[player][key] = value;
+  initialGameState[settings.activePlayer].isActive = true;
+
   return initialGameState;
 }
 
@@ -59,7 +60,6 @@ function getWaitingPlayer(gameState) {
 }
 
 module.exports = {
-  initialGameState,
   defineSettings,
   generateNextGameState,
   getAvailableMoves,
