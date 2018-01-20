@@ -20,7 +20,7 @@ function showBoard(gameState) {
 
 function greeting() {
   console.clear();
-  console.log('Welcome to Tic Tac Toe!'.bgWhite.black);
+  console.log('Welcome to Tic Tac Toe!\n'.bgWhite.black);
 }
 
 function pleaseWait(playerSymbol) {
@@ -28,8 +28,9 @@ function pleaseWait(playerSymbol) {
 }
 
 function gameOver(winner) {
-  console.log(`GAME OVER: ${winner ? winner.symbol : 'NOBODY'} WINS!\n\nThanks for playing. Run "npm start" to play again :)\n`.yellow);
-  console.log(`${'Brought to you by: '.yellow}${'JMBOTHE'.trap.rainbow}\n`);
+  console.log(`GAME OVER: ${winner ? winner.symbol : 'NOBODY'} WINS!\n`.yellow);
+  console.log('Thanks for playing. Run "npm start" to play again :)\n');
+  console.log(`${'Brought to you by:'} ${'JMBOTHE'.trap.rainbow}\n`);
 }
 
 function error() {

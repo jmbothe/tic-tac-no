@@ -1,5 +1,5 @@
 const colors = require('colors');
-const prompt = require('prompt');
+const inquirer = require('inquirer');
 const { settingsPrompts, movePrompt } = require('./prompt_schemas');
 const view = require('./view');
 const { getBestMove } = require('./perfect_player');
@@ -11,9 +11,6 @@ const {
   checkForGameOver,
 } = require('./tic_tac_toe');
 
-prompt.message = '';
-prompt.delimiter = '';
-
 function handleGameOver(gameState) {
   view.showBoard(gameState);
   view.gameOver(getWinner(gameState));
@@ -22,8 +19,11 @@ function handleGameOver(gameState) {
 
 // called after every turn to determine if game should end or continue for next player
 function routeNextMove(gameState) {
-  if (checkForGameOver(gameState)) handleGameOver(gameState);
-  play(gameState);
+  if (checkForGameOver(gameState)) {
+    handleGameOver(gameState);
+  } else {
+    play(gameState);
+  }
 }
 
 function handleComputerMove(gameState, playerSymbol) {
@@ -39,31 +39,34 @@ function handleComputerMove(gameState, playerSymbol) {
 }
 
 function handleHumanMove(gameState, playerSymbol) {
-  prompt.get(movePrompt(prompt, gameState, playerSymbol), (err, result) => {
-    if (err) {
+  inquirer.prompt(movePrompt(gameState, playerSymbol))
+    .then((answers) => {
+      const updatedState = generateNextGameState(gameState, +answers.move);
+      routeNextMove(updatedState);
+    })
+    .catch(() => {
       view.error();
       process.exit();
-    }
-    const updatedState = generateNextGameState(gameState, result.move);
-    routeNextMove(updatedState);
-  });
+    });
 }
 
 function play(gameState) {
   const activePlayer = getActivePlayer(gameState);
   view.showBoard(gameState);
-  if (!activePlayer.isHuman) handleComputerMove(gameState, activePlayer.symbol);
-  handleHumanMove(gameState, activePlayer.symbol);
+  if (!activePlayer.isHuman) {
+    handleComputerMove(gameState, activePlayer.symbol);
+  } else {
+    handleHumanMove(gameState, activePlayer.symbol);
+  }
 }
 
 function setupGame() {
-  prompt.get(settingsPrompts(prompt), (err, result) => {
-    if (err) {
+  inquirer.prompt(settingsPrompts)
+    .then(answers => play(defineSettings(answers)))
+    .catch(() => {
       view.error();
       process.exit();
-    }
-    play(defineSettings(result));
-  });
+    });
 }
 
 function initialize() {

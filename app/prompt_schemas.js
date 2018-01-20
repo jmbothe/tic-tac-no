@@ -1,69 +1,70 @@
-function settingsPrompts(prompt) {
-  return {
-    properties: {
-      firstPlayerIsHuman: {
-        description: '\nIs First Player Human? (enter "y" or "n")'.white,
-        type: 'string',
-        conform: data => data.length === 1 && /y|n/i.test(data),
-        message: 'Please enter only a single character: "y" for Yes or "n" for No.',
-        required: true,
-        before: data => data === 'y',
-      },
-      firstPlayerSymbol: {
-        description: '\nWhat is First Player\'s Symbol? (NO NUMBERS)'.white,
-        type: 'string',
-        conform: data => data.length === 1 && /\D/.test(data),
-        message: 'Please enter only a single non-numerical character (for example, "X").',
-        required: true,
-      },
-      secondPlayerIsHuman: {
-        description: '\nIs Second Player Human? (enter "y" or "n")'.white,
-        type: 'string',
-        conform: data => data.length === 1 && /y|n/i.test(data),
-        message: 'Please enter only a single character: "y" for Yes or "n" for No.',
-        required: true,
-        before: data => data === 'y',
-      },
-      secondPlayerSymbol: {
-        description: '\nWhat is Second Player\'s Symbol? (NO NUMBERS)'.white,
-        type: 'string',
-        conform: (data) => {
-          const firstPlayerSymbol = prompt.history('firstPlayerSymbol').value;
-          return data.length === 1 && /\D/.test(data) && data !== firstPlayerSymbol;
-        },
-        message: 'Please enter only a single non-numerical character (for example, "X").\nAlso, please be sure you arent entering the first players symbol.',
-        required: true,
-      },
-      activePlayer: {
-        description: '\nWhich player should go first? (enter "1" or "2")'.white,
-        type: 'string',
-        conform: data => data.length === 1 && /1|2/.test(data),
-        message: 'Please enter only a single character: "1" for first player or "2" for second player.',
-        required: true,
-        before: data => (data === '1' ? 0 : 1),
-      },
+const settingsPrompts = [
+  {
+    type: 'list',
+    name: 'firstPlayerIsHuman',
+    message: 'Is first player human?',
+    choices: ['Yes', 'No'],
+    filter: input => input === 'Yes',
+  },
+  {
+    name: 'firstPlayerSymbol',
+    message: 'Choose first player symbol (NO NUMBERS)',
+    validate: (input) => {
+      if (!(input.length === 1)) {
+        return `"${input}" is invalid input. Too many characters.Please enter only a single non-numerical character.\n`;
+      } else if (!(/\D/.test(input))) {
+        return `"${input}" is invalid input. Please do not enter any numbers for player symbols.\n`
+      }
+      return true;
     },
-  };
-}
+  },
+  {
+    type: 'list',
+    name: 'secondPlayerIsHuman',
+    message: 'Is second player human?',
+    choices: ['Yes', 'No'],
+    filter: input => input === 'Yes',
+  },
+  {
+    name: 'secondPlayerSymbol',
+    message: 'Choose second player symbol (NO NUMBERS)',
+    validate: (input, answers) => {
+      if (!(input.length === 1)) {
+        return `"${input}" is invalid input. Too many characters. Please enter only a single non-numerical character.\n`;
+      } else if (!(/\D/.test(input))) {
+        return `"${input}" is invalid input. Please do not enter any numbers for player symbols.\n`;
+      } else if (input === answers.firstPlayerSymbol) {
+        return `"${input}" is already the first player's symbol. Please choose a different symbol.\n`;
+      }
+      return true;
+    },
+  },
+  {
+    type: 'list',
+    name: 'activePlayer',
+    message: 'Which player should go first?',
+    choices: ['First Player', 'Second Player'],
+    filter: input => (input === 'First Player' ? 0 : 1),
+  },
+];
 
-function movePrompt(prompt, gameState, playerSymbol) {
-  return {
-    properties: {
-      move: {
-        description: (`Player ${playerSymbol}, please choose an available space (Enter a number between 0 and 8)`.yellow),
-        type: 'string',
-        conform: (data) => {
-          return data.length === 1
-          && /[0-8]/.test(data)
-          && !gameState[0].moves.includes(+data)
-          && !gameState[1].moves.includes(+data);
-        },
-        message: 'Please enter only a single number between 0 and 8. Also, please only select a space that is still available.\n',
-        required: true,
-        before: data => +data,
+function movePrompt(gameState, playerSymbol) {
+  return [
+    {
+      name: 'move',
+      message: `Player ${playerSymbol}, please choose an available space (enter a number between 0 and 8)`,
+      validate: (input) => {
+        if (!(input.length === 1)) {
+          return `"${input}" is invalid input. Too many characters. Please enter only a single number between 0 and 8.\n`;
+        } else if (!(/[0-8]/.test(input))) {
+          return `"${input}" is invalid input. It is not a number between 0 and 8. Please try again.\n`;
+        } else if (gameState[0].moves.includes(+input) || gameState[1].moves.includes(+input)) {
+          return `Space ${input} is already taken. Please choose a different space on the board.\n`;
+        }
+        return true;
       },
     },
-  };
+  ];
 }
 
 module.exports = { settingsPrompts, movePrompt };
