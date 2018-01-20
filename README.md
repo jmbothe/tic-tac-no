@@ -38,7 +38,7 @@ Before installing this game, make sure you have the following dependencies insta
 
 1. [Clone this repository](https://help.github.com/articles/cloning-a-repository/) onto your machine in a directory of your choosing.
 2. In the command line terminal, navigate to the root directory of your local clone (i.e., `/unbeatable-tic-tac-toe/`).
-3. Run `npm install`. This will install all the development dependencies of this project ([Mocha](https://mochajs.org/) and [Chai](http://chaijs.com/) for testing, and [ESLint](https://eslint.org/) for code linting). (NOTE: this step is only necessary if you wish to run tests and/or contribute to development of the project).
+3. Run `npm install`. This will install all of the dependencies of this project.
 
 <a name="playing"/>
 
