@@ -24,7 +24,7 @@ function greeting() {
 }
 
 function pleaseWait(playerSymbol) {
-  console.log(`Please wait, Player ${playerSymbol} is choosing her move...`.yellow);
+  console.log(`Please wait, Player ${playerSymbol} is choosing her move...`);
 }
 
 function gameOver(winner) {

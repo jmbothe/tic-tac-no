@@ -2,9 +2,9 @@ const settingsPrompts = [
   {
     type: 'list',
     name: 'firstPlayerIsHuman',
-    message: 'Is first player human?',
-    choices: ['Yes', 'No'],
-    filter: input => input === 'Yes',
+    message: 'Is first player human or computer?',
+    choices: ['Human', 'Computer'],
+    filter: input => input === 'Human',
   },
   {
     name: 'firstPlayerSymbol',
@@ -21,9 +21,9 @@ const settingsPrompts = [
   {
     type: 'list',
     name: 'secondPlayerIsHuman',
-    message: 'Is second player human?',
-    choices: ['Yes', 'No'],
-    filter: input => input === 'Yes',
+    message: 'Is second player human or computer?',
+    choices: ['Human', 'Computer'],
+    filter: input => input === 'Human',
   },
   {
     name: 'secondPlayerSymbol',
