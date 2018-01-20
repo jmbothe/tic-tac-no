@@ -1,23 +1,29 @@
 const WINNING_PATTERNS = require('./winning_patterns');
 
-function defineSettings(settings) {
+function defineSettings({
+  firstPlayerSymbol,
+  firstPlayerIsHuman,
+  secondPlayerSymbol,
+  secondPlayerIsHuman,
+  activePlayer,
+}) {
   // Don't actually need a board. Just need players' moves to test against winning patterns
   const initialGameState = [
     {
       moves: [],
-      symbol: settings.firstPlayerSymbol,
-      isHuman: settings.firstPlayerIsHuman,
+      symbol: firstPlayerSymbol,
+      isHuman: firstPlayerIsHuman,
       isActive: false,
     },
     {
       moves: [],
-      symbol: settings.secondPlayerSymbol,
-      isHuman: settings.secondPlayerIsHuman,
+      symbol: secondPlayerSymbol,
+      isHuman: secondPlayerIsHuman,
       isActive: false,
     },
   ];
 
-  initialGameState[settings.activePlayer].isActive = true;
+  initialGameState[activePlayer].isActive = true;
 
   return initialGameState;
 }

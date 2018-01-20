@@ -1,5 +1,6 @@
+const colors = require('colors');
 const prompt = require('prompt');
-const PROMPTS = require('./settings_prompts');
+const { settingsPrompts, movePrompt } = require('./prompt_schemas');
 const view = require('./view');
 const { getBestMove } = require('./perfect_player');
 const {
@@ -21,11 +22,8 @@ function handleGameOver(gameState) {
 
 // called after every turn to determine if game should end or continue for next player
 function routeNextMove(gameState) {
-  if (checkForGameOver(gameState)) {
-    handleGameOver(gameState);
-  } else {
-    play(gameState);
-  }
+  if (checkForGameOver(gameState)) handleGameOver(gameState);
+  play(gameState);
 }
 
 function handleComputerMove(gameState, playerSymbol) {
@@ -41,26 +39,11 @@ function handleComputerMove(gameState, playerSymbol) {
 }
 
 function handleHumanMove(gameState, playerSymbol) {
-  const schema = {
-    properties: {
-      move: {
-        description: 'Please choose an available space (Enter a number between 0 and 8)',
-        type: 'string',
-        conform: (data) => {
-          return data.length === 1
-          && /[0-8]/.test(data)
-          && !gameState[0].moves.includes(+data)
-          && !gameState[1].moves.includes(+data);
-        },
-        message: 'Please enter only a single number between 0 and 8. Also, please only select a space that is still available.',
-        required: true,
-        before: data => +data,
-      },
-    },
-  };
-  view.activePlayer(playerSymbol);
-
-  prompt.get(schema, (err, result) => {
+  prompt.get(movePrompt(prompt, gameState, playerSymbol), (err, result) => {
+    if (err) {
+      view.error();
+      process.exit();
+    }
     const updatedState = generateNextGameState(gameState, result.move);
     routeNextMove(updatedState);
   });
@@ -68,27 +51,24 @@ function handleHumanMove(gameState, playerSymbol) {
 
 function play(gameState) {
   const activePlayer = getActivePlayer(gameState);
-
   view.showBoard(gameState);
-
-  if (!activePlayer.isHuman) {
-    handleComputerMove(gameState, activePlayer.symbol);
-  } else {
-    handleHumanMove(gameState, activePlayer.symbol);
-  }
+  if (!activePlayer.isHuman) handleComputerMove(gameState, activePlayer.symbol);
+  handleHumanMove(gameState, activePlayer.symbol);
 }
 
 function setupGame() {
-  prompt.get(PROMPTS, (err, result) => {
+  prompt.get(settingsPrompts(prompt), (err, result) => {
+    if (err) {
+      view.error();
+      process.exit();
+    }
     play(defineSettings(result));
   });
 }
 
 function initialize() {
   view.greeting();
-  setTimeout(() => {
-    setupGame();
-  }, 2000);
+  setupGame();
 }
 
 module.exports = {
