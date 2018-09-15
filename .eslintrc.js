@@ -1,4 +1,11 @@
 module.exports = {
+  settings: {
+    'import/resolver': {
+      'babel-module': {
+        root: '.',
+      },
+    },
+  },
     extends: 'airbnb',
     env: {
       browser: true
