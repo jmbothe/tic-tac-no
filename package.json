@@ -1,32 +1,68 @@
 {
-  "name": "unbeatable-tic-tac-toe",
+  "name": "tic-tac-no",
   "version": "1.0.0",
-  "description": "A classic game of strategy featuring unbeatable opponent AI",
+  "description": "Classic game of strategy featuring an unbeatable AI opponent.",
   "main": "index.js",
   "scripts": {
-    "start": "node index",
-    "test": "mocha",
-    "test-watch": "mocha -w"
+    "start": "webpack-dev-server --mode development",
+    "build": "webpack --mode production"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jmbothe/unbeatable-tic-tac-toe.git"
-  },
-  "author": "Jeff Bothe",
+  "author": "jmbothe",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/jmbothe/unbeatable-tic-tac-toe/issues"
-  },
-  "homepage": "https://github.com/jmbothe/unbeatable-tic-tac-toe#readme",
   "dependencies": {
-    "colors": "^1.1.2",
-    "inquirer": "^5.0.1"
+    "react": "^16.5.0",
+    "react-dom": "^16.5.0",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
+    "semantic-ui-css": "^2.3.3",
+    "semantic-ui-react": "^0.82.5",
+    "styled-components": "^3.4.6"
   },
   "devDependencies": {
-    "chai": "^4.1.2",
-    "eslint": "^4.15.0",
-    "eslint-config-airbnb-base": "^12.1.0",
-    "eslint-plugin-import": "^2.8.0",
-    "mocha": "^5.0.0"
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^8.2.3",
+    "babel-loader": "^7.1.4",
+    "babel-plugin-module-resolver": "^2.7.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "clean-webpack-plugin": "^0.1.19",
+    "compression-webpack-plugin": "^1.1.11",
+    "css-hot-loader": "^1.3.9",
+    "css-loader": "^0.28.11",
+    "eslint": "^5.5.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-babel": "^5.1.0",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-jsx-a11y": "^6.1.1",
+    "eslint-plugin-react": "^7.11.1",
+    "file-loader": "^1.1.11",
+    "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "^0.4.1",
+    "optimize-css-assets-webpack-plugin": "^4.0.3",
+    "react-hot-loader": "^4.3.7",
+    "style-loader": "^0.21.0",
+    "uglifyjs-webpack-plugin": "^1.2.7",
+    "webpack": "^4.11.1",
+    "webpack-cli": "^3.0.2",
+    "webpack-dev-server": "^3.1.4"
+  },
+  "babel": {
+    "presets": [
+      "env",
+      "react",
+      "stage-0"
+    ],
+    "plugins": [
+      "styled-components",
+      [
+        "module-resolver",
+        {
+          "root": [
+            "./"
+          ]
+        }
+      ]
+    ]
   }
 }
