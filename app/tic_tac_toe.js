@@ -1,30 +1,26 @@
 const WINNING_PATTERNS = require('./winning_patterns');
 
 function defineSettings({
-  firstPlayerSymbol,
   firstPlayerIsHuman,
-  secondPlayerSymbol,
   secondPlayerIsHuman,
-  activePlayer,
 }) {
   // Don't actually need a board. Just need players' moves to test against winning patterns
-  const initialGameState = [
-    {
-      moves: [],
-      symbol: firstPlayerSymbol,
-      isHuman: firstPlayerIsHuman,
-      isActive: false,
+  const initialGameState = {
+    activePlayer: 'X',
+    waitingPlayer: 'Y',
+    players: {
+      X: {
+        moves: [],
+        isHuman: firstPlayerIsHuman,
+        symbol: 'X',
+      },
+      Y: {
+        moves: [],
+        isHuman: secondPlayerIsHuman,
+        symbol: 'Y',
+      },
     },
-    {
-      moves: [],
-      symbol: secondPlayerSymbol,
-      isHuman: secondPlayerIsHuman,
-      isActive: false,
-    },
-  ];
-
-  initialGameState[activePlayer].isActive = true;
-
+  };
   return initialGameState;
 }
 
@@ -33,8 +29,9 @@ function defineSettings({
 function generateNextGameState(gameState, move) {
   const newState = JSON.parse(JSON.stringify(gameState));
 
-  newState.find(player => player.isActive).moves.push(move);
-  newState.forEach(player => player.isActive = !player.isActive);
+  newState.players[newState.activePlayer].moves.push(move);
+
+  [newState.activePlayer, newState.waitingPlayer] = [newState.waitingPlayer, newState.activePlayer];
   return newState;
 }
 
@@ -49,20 +46,13 @@ function checkForWin({ moves }) {
 }
 
 function getWinner(gameState) {
-  return gameState.find(player => checkForWin(player));
+  const winner = Object.entries(gameState.players).find(player => checkForWin(player[1]));
+  return winner && gameState.players[winner[0]];
 }
 
 function checkForGameOver(gameState) {
-  return gameState.some(player => checkForWin(player))
-    || getAvailableMoves(...gameState[0].moves, ...gameState[1].moves).length === 0;
-}
-
-function getActivePlayer(gameState) {
-  return gameState.find(player => player.isActive);
-}
-
-function getWaitingPlayer(gameState) {
-  return gameState.find(player => !player.isActive);
+  return Object.entries(gameState.players).some(player => checkForWin(player[1]))
+    || getAvailableMoves(...gameState.players.X.moves, ...gameState.players.Y.moves).length === 0;
 }
 
 module.exports = {
@@ -72,6 +62,4 @@ module.exports = {
   checkForWin,
   getWinner,
   checkForGameOver,
-  getActivePlayer,
-  getWaitingPlayer,
 };
