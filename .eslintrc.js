@@ -17,6 +17,7 @@ module.exports = {
       'no-confusing-arrow': 0,
       'react/destructuring-assignment': 0,
       'implicit-arrow-linebreak': 0,
-      'react/jsx-wrap-multilines': 0
+      'react/jsx-wrap-multilines': 0,
+      'arrow-parens': 0
     }
 };

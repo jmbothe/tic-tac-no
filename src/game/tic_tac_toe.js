@@ -1,19 +1,19 @@
 const WINNING_PATTERNS = require('./winning_patterns');
 
 // Don't actually need a board. Just need players' moves to test against winning patterns
-const initialState = {
+const initialGameState = {
   activePlayer: 'X',
-  waitingPlayer: 'Y',
+  waitingPlayer: 'O',
   players: {
     X: {
       moves: [],
-      isHuman: undefined,
+      isHuman: false,
       symbol: 'X',
     },
-    Y: {
+    O: {
       moves: [],
-      isHuman: undefined,
-      symbol: 'Y',
+      isHuman: false,
+      symbol: 'O',
     },
   },
 };
@@ -45,11 +45,11 @@ function getWinner(gameState) {
 
 function checkForGameOver(gameState) {
   return Object.entries(gameState.players).some(player => checkForWin(player[1]))
-    || getAvailableMoves(...gameState.players.X.moves, ...gameState.players.Y.moves).length === 0;
+    || getAvailableMoves(...gameState.players.X.moves, ...gameState.players.O.moves).length === 0;
 }
 
 module.exports = {
-  initialState,
+  initialGameState,
   generateNextGameState,
   getAvailableMoves,
   checkForWin,

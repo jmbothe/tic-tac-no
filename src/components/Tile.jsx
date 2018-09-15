@@ -12,12 +12,12 @@ const TileWrapper = styled.button`
   border-right: ${props => (props.index - 2) % 3 === 0 ? 'none' : '1px solid black'};
   font-family: "Bowlby One SC", cursive;
   font-size: 3rem;
-  color: ${props => props.playerMark === 'X' ? 'red' : 'blue'};
+  color: ${props => props.occupied === 'X' ? 'red' : 'blue'};
 `;
 
 const Tile = props =>
-  <TileWrapper {...props}>
-    {props.playerMark}
+  <TileWrapper {...props} onClick={() => props.handleHumanMove(props.index)}>
+    {props.occupied}
   </TileWrapper>;
 
 export default Tile;

@@ -51,7 +51,7 @@ function getBestMove(baseState, testState) {
 
     depth += 1;
     const scores = [];
-    const moves = getAvailableMoves(...testState.players.X.moves, ...testState.players.Y.moves);
+    const moves = getAvailableMoves(...testState.players.X.moves, ...testState.players.O.moves);
 
     // generate scores from all possible next moves,
     // based on their effect on all possible future games
