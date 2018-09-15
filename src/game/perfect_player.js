@@ -76,7 +76,5 @@ function getBestMove(baseState, testState) {
 }
 
 module.exports = {
-  getPlayerRoles, // only exposed for testing purposes
-  getScore, // only exposed for testing purposes
   getBestMove,
 };

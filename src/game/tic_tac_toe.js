@@ -1,29 +1,22 @@
 const WINNING_PATTERNS = require('./winning_patterns');
 
-function defineSettings({
-  firstPlayerIsHuman,
-  secondPlayerIsHuman,
-}) {
-  // Don't actually need a board. Just need players' moves to test against winning patterns
-  const initialGameState = {
-    activePlayer: 'X',
-    waitingPlayer: 'Y',
-    players: {
-      X: {
-        moves: [],
-        isHuman: firstPlayerIsHuman,
-        symbol: 'X',
-      },
-      Y: {
-        moves: [],
-        isHuman: secondPlayerIsHuman,
-        symbol: 'Y',
-      },
+// Don't actually need a board. Just need players' moves to test against winning patterns
+const initialState = {
+  activePlayer: 'X',
+  waitingPlayer: 'Y',
+  players: {
+    X: {
+      moves: [],
+      isHuman: undefined,
+      symbol: 'X',
     },
-  };
-  return initialGameState;
-}
-
+    Y: {
+      moves: [],
+      isHuman: undefined,
+      symbol: 'Y',
+    },
+  },
+};
 // Used for creating hypothetical states within the minimax algorithm
 // AND for mutating that actual game state
 function generateNextGameState(gameState, move) {
@@ -56,7 +49,7 @@ function checkForGameOver(gameState) {
 }
 
 module.exports = {
-  defineSettings,
+  initialState,
   generateNextGameState,
   getAvailableMoves,
   checkForWin,
