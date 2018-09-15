@@ -58,7 +58,7 @@ function movePrompt(gameState, playerSymbol) {
           return `"${input}" is invalid input. Too many characters. Please enter only a single number between 0 and 8.\n`;
         } else if (!(/[0-8]/.test(input))) {
           return `"${input}" is invalid input. It is not a number between 0 and 8. Please try again.\n`;
-        } else if (gameState[0].moves.includes(+input) || gameState[1].moves.includes(+input)) {
+        } else if (gameState.players.X.moves.includes(+input) || gameState.players.Y.moves.includes(+input)) {
           return `Space ${input} is already taken. Please choose a different space on the board.\n`;
         }
         return true;

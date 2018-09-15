@@ -5,8 +5,8 @@ function colorSpace(space) {
 }
 
 function showBoard(gameState) {
-  gameState.forEach(player => player.moves.forEach(move =>
-    board.splice(move, 1, player.symbol)));
+  Object.entries(gameState.players).forEach(player => player[1].moves.forEach(move =>
+    board.splice(move, 1, player[1].symbol)));
 
   console.clear();
   console.log(`

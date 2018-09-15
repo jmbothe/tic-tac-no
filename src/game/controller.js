@@ -6,7 +6,6 @@ const { getBestMove } = require('./perfect_player');
 const {
   defineSettings,
   generateNextGameState,
-  getActivePlayer,
   getWinner,
   checkForGameOver,
 } = require('./tic_tac_toe');
@@ -51,7 +50,7 @@ function handleHumanMove(gameState, playerSymbol) {
 }
 
 function play(gameState) {
-  const activePlayer = getActivePlayer(gameState);
+  const activePlayer = gameState.players[gameState.activePlayer];
   view.showBoard(gameState);
   if (!activePlayer.isHuman) {
     handleComputerMove(gameState, activePlayer.symbol);
@@ -63,7 +62,8 @@ function play(gameState) {
 function setupGame() {
   inquirer.prompt(settingsPrompts)
     .then(answers => play(defineSettings(answers)))
-    .catch(() => {
+    .catch((error) => {
+      console.log(error)
       view.error();
       process.exit();
     });

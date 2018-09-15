@@ -3,8 +3,6 @@ const {
   getAvailableMoves,
   checkForWin,
   checkForGameOver,
-  getActivePlayer,
-  getWaitingPlayer,
 } = require('./tic_tac_toe');
 
 // checks base game state against hypothetical state so that minimax can
@@ -12,13 +10,13 @@ const {
 // rather than who is active in hypothetical state
 function getPlayerRoles(baseState, testState) {
   const activeBasePlayerMatchesActiveTestPlayer =
-    getActivePlayer(testState).symbol === getActivePlayer(baseState).symbol;
+    testState.activePlayer === baseState.activePlayer;
 
   const currentPlayer = activeBasePlayerMatchesActiveTestPlayer
-    ? getActivePlayer(testState) : getWaitingPlayer(testState);
+    ? testState.players[testState.activePlayer] : testState.players[testState.waitingPlayer];
 
   const waitingPlayer = activeBasePlayerMatchesActiveTestPlayer
-    ? getWaitingPlayer(testState) : getActivePlayer(testState);
+    ? testState.players[testState.waitingPlayer] : testState.players[testState.activePlayer];
 
   return {
     currentPlayer,
@@ -53,7 +51,7 @@ function getBestMove(baseState, testState) {
 
     depth += 1;
     const scores = [];
-    const moves = getAvailableMoves(...testState[0].moves, ...testState[1].moves);
+    const moves = getAvailableMoves(...testState.players.X.moves, ...testState.players.Y.moves);
 
     // generate scores from all possible next moves,
     // based on their effect on all possible future games
