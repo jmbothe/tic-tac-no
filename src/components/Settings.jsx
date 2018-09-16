@@ -7,11 +7,13 @@ import {
 const SettingsWrapper = styled.section`
   display: flex;
   flex-direction: column;
+  padding: 2rem 2rem 0;
 `;
 
 const Settings = props => (
   <SettingsWrapper>
     <Form>
+      <h3>Settings</h3>
       <Form.Field>
         <Radio
           toggle
@@ -37,8 +39,7 @@ const Settings = props => (
     <Message icon>
       <Icon name="circle notched" loading={props.loading} />
       <Message.Content>
-        <Message.Header>Just one second</Message.Header>
-        We are fetching that content for you.
+        Choose your settings and then start the game.
       </Message.Content>
     </Message>
   </SettingsWrapper>

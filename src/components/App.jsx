@@ -10,15 +10,23 @@ import {
 import { getBestMove } from 'src/game/perfect_player.js';
 import Settings from './Settings.jsx';
 import Board from './Board.jsx';
+import Header from './Header.jsx';
 
-const AppWrapper = styled.main`
+const AppWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  align-items: center;
+`;
+
+const ContentWrapper = styled.main`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 
   @media (orientation: landscape) {
     flex-direction: row;
+    justify-content: space-around;
     max-width: 1080px;
-    margin: 0 auto;
   }
 `;
 
@@ -120,6 +128,8 @@ class App extends Component {
   render() {
     return (
       <AppWrapper>
+        <Header />
+        <ContentWrapper>
         <Settings
           {...this.state}
           toggleSentience={this.toggleSentience}
@@ -131,6 +141,7 @@ class App extends Component {
           handleHumanMove={this.handleHumanMove}
           handleComputerMove={this.handleComputerMove}
         />
+        </ContentWrapper>
       </AppWrapper>
     );
   }
