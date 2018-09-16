@@ -60,6 +60,16 @@ module.exports = {
           loader: 'babel-loader',
         },
       },
+      // need this rule to get semantic ui css import to work
+      {
+        test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
+        use: {
+          loader: 'url-loader',
+          options: {
+            limit: 100000,
+          },
+        },
+      },
       {
         test: /\.css$/,
         use: ['css-hot-loader', MiniCssExtractPlugin.loader, 'css-loader'],
