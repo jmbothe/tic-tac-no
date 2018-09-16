@@ -7,7 +7,7 @@ const initialGameState = {
   players: {
     X: {
       moves: [],
-      isHuman: false,
+      isHuman: true,
       symbol: 'X',
     },
     O: {
@@ -40,7 +40,7 @@ function checkForWin({ moves }) {
 
 function getWinner(gameState) {
   const winner = Object.entries(gameState.players).find(player => checkForWin(player[1]));
-  return winner && gameState.players[winner[0]];
+  return winner && gameState.players[winner[0]].symbol;
 }
 
 function checkForGameOver(gameState) {
