@@ -8,6 +8,7 @@ const SettingsWrapper = styled.section`
   display: flex;
   flex-direction: column;
   padding: 2rem 2rem 0;
+  flex-grow: 1;
 `;
 
 const Settings = props => (
@@ -39,7 +40,7 @@ const Settings = props => (
     <Message icon>
       <Icon name="circle notched" loading={props.loading} />
       <Message.Content>
-        Choose your settings and then start the game.
+        {props.message}
       </Message.Content>
     </Message>
   </SettingsWrapper>

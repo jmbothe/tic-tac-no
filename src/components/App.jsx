@@ -54,7 +54,7 @@ class App extends Component {
       && !this.state.winner
       && this.state.inPlay
     ) {
-      computerMoveTimeout = setTimeout(() => this.handleComputerMove(), 2000);
+      computerMoveTimeout = setTimeout(() => this.handleComputerMove(), 3000);
     }
   }
 
@@ -102,12 +102,14 @@ class App extends Component {
           loading: false,
           winner: undefined,
           inPlay: false,
+          message: 'Choose your settings and then start the game.',
         };
       }
       return {
         game,
         winner: undefined,
         inPlay: true,
+        message: prevState.game.players[prevState.game.activePlayer].isHuman ? `Player ${prevState.game.players[prevState.game.activePlayer].symbol} please make your move...` : `Player ${prevState.game.players[prevState.game.activePlayer].symbol} is making her move...`,
       };
     });
   };
@@ -137,6 +139,7 @@ class App extends Component {
       return {
         game: nextGameState,
         loading: !nextGameState.players[nextGameState.activePlayer].isHuman,
+        message: nextGameState.players[nextGameState.activePlayer].isHuman ? `Player ${nextGameState.players[nextGameState.activePlayer].symbol} please make your move...` : `Player ${nextGameState.players[nextGameState.activePlayer].symbol} is making her move...`,
       };
     });
   };
@@ -170,6 +173,7 @@ class App extends Component {
       return {
         game: nextGameState,
         loading: !nextGameState.players[nextGameState.activePlayer].isHuman,
+        message: nextGameState.players[nextGameState.activePlayer].isHuman ? `Player ${nextGameState.players[nextGameState.activePlayer].symbol} please make your move...` : `Player ${nextGameState.players[nextGameState.activePlayer].symbol} is making her move...`,
       };
     });
   };
