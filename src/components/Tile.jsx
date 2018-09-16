@@ -20,7 +20,7 @@ const Tile = props => (
   <TileWrapper
     {...props}
     onClick={() => props.handleHumanMove(props.index)}
-    disabled={props.loading}
+    disabled={props.loading || !props.inPlay}
   >
     {props.occupied}
   </TileWrapper>

@@ -12,9 +12,9 @@ const BoardWrapper = styled.section`
 
 const Board = props => (
   <BoardWrapper>
-    {
-      props.computeBoard().map((tile, index) => <Tile {...props} occupied={tile} index={index} key={index} />)
-    }
+    {props.computeBoard().map((tile, index) => (
+      <Tile {...props} occupied={tile} index={index} key={index} />
+    ))}
   </BoardWrapper>
 );
 

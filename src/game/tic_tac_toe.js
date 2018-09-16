@@ -12,7 +12,7 @@ const initialGameState = {
     },
     O: {
       moves: [],
-      isHuman: false,
+      isHuman: true,
       symbol: 'O',
     },
   },
