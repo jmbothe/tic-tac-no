@@ -12,6 +12,8 @@ import Settings from './Settings.jsx';
 import Board from './Board.jsx';
 import Header from './Header.jsx';
 
+let computerMoveTimeout;
+
 const AppWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -19,9 +21,9 @@ const AppWrapper = styled.div`
 `;
 
 const ContentWrapper = styled.main`
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 
   @media (orientation: landscape) {
     flex-direction: row;
@@ -36,15 +38,23 @@ class App extends Component {
     loading: false,
     winner: undefined,
     inPlay: false,
+    message: 'Choose your settings and then start the game.',
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (
+    if (this.state.inPlay !== prevState.inPlay) {
+      if (this.state.inPlay) {
+        if (!this.state.game.players[this.state.game.activePlayer].isHuman) {
+          this.handleHumanMove(Math.floor(Math.random() * Math.floor(9)));
+        }
+      }
+    } else if (
       this.state.game.activePlayer !== prevState.game.activePlayer
       && !this.state.game.players[this.state.game.activePlayer].isHuman
       && !this.state.winner
+      && this.state.inPlay
     ) {
-      setTimeout(() => this.handleComputerMove(), 2000);
+      computerMoveTimeout = setTimeout(() => this.handleComputerMove(), 2000);
     }
   }
 
@@ -62,57 +72,106 @@ class App extends Component {
   };
 
   toggleInPlay = () => {
-    if (this.state.inPlay) {
-      this.setState({
-        game: initialGameState,
-        loading: false,
+    this.setState(prevState => {
+      const game = update(prevState.game, {
+        activePlayer: {
+          $set: 'X',
+        },
+        waitingPlayer: {
+          $set: 'O',
+        },
+        players: {
+          X: {
+            moves: {
+              $set: [],
+            },
+          },
+          O: {
+            moves: {
+              $set: [],
+            },
+          },
+        },
+      });
+
+      if (prevState.inPlay) {
+        clearTimeout(computerMoveTimeout);
+
+        return {
+          game,
+          loading: false,
+          winner: undefined,
+          inPlay: false,
+        };
+      }
+      return {
+        game,
         winner: undefined,
-        inPlay: false,
-      });
-    } else {
-      this.setState({ inPlay: true }, () => {
-        if (!this.state.game.players[this.state.game.activePlayer].isHuman) {
-          if (!this.state.game.players[this.state.game.waitingPlayer].isHuman) {
-            this.handleHumanMove(Math.floor(Math.random() * Math.floor(9)));
-          } else {
-            this.handleComputerMove();
-          }
-        }
-      });
-    }
+        inPlay: true,
+      };
+    });
   };
 
   handleHumanMove = move => {
-    const nextGameState = generateNextGameState(this.state.game, move);
-    if (checkForGameOver(nextGameState)) {
-      const winner = getWinner(nextGameState);
-      this.setState({ game: nextGameState, winner: winner || 'Nobody' });
-    } else {
-      this.setState({
+    this.setState(prevState => {
+      const nextGameState = generateNextGameState(prevState.game, move);
+      if (checkForGameOver(nextGameState)) {
+        const winner = getWinner(nextGameState);
+        const game = update(nextGameState, {
+          activePlayer: {
+            $set: 'X',
+          },
+          waitingPlayer: {
+            $set: 'O',
+          },
+        });
+
+        return {
+          game,
+          winner: winner || 'Nobody',
+          message: `${winner
+            || 'Nobody'} has won! Adjust your settings or play again!`,
+          inPlay: false,
+        };
+      }
+      return {
         game: nextGameState,
         loading: !nextGameState.players[nextGameState.activePlayer].isHuman,
-      });
-    }
+      };
+    });
   };
 
   handleComputerMove = () => {
-    const nextGameState = generateNextGameState(
-      this.state.game,
-      getBestMove(this.state.game, JSON.parse(JSON.stringify(this.state.game))),
-    );
-    if (checkForGameOver(nextGameState)) {
-      const winner = getWinner(nextGameState);
-      this.setState({
-        game: nextGameState,
-        winner: winner || 'Nobody',
-        loading: false,
-      });
-    } else {
-      this.setState({
+    this.setState(prevState => {
+      const nextGameState = generateNextGameState(
+        prevState.game,
+        getBestMove(prevState.game, JSON.parse(JSON.stringify(prevState.game))),
+      );
+      if (checkForGameOver(nextGameState)) {
+        const winner = getWinner(nextGameState);
+        const game = update(nextGameState, {
+          activePlayer: {
+            $set: 'X',
+          },
+          waitingPlayer: {
+            $set: 'O',
+          },
+        });
+
+        return {
+          game,
+          winner: winner || 'Nobody',
+          loading: false,
+          message: `${winner
+            || 'Nobody'} has won! Adjust your settings or play again!`,
+          inPlay: false,
+        };
+      }
+      return {
         game: nextGameState,
         loading: !nextGameState.players[nextGameState.activePlayer].isHuman,
-      });
-    }
+      };
+    });
   };
 
   computeBoard = () => {
@@ -130,17 +189,17 @@ class App extends Component {
       <AppWrapper>
         <Header />
         <ContentWrapper>
-        <Settings
-          {...this.state}
-          toggleSentience={this.toggleSentience}
-          toggleInPlay={this.toggleInPlay}
-        />
-        <Board
-          {...this.state}
-          computeBoard={this.computeBoard}
-          handleHumanMove={this.handleHumanMove}
-          handleComputerMove={this.handleComputerMove}
-        />
+          <Settings
+            {...this.state}
+            toggleSentience={this.toggleSentience}
+            toggleInPlay={this.toggleInPlay}
+          />
+          <Board
+            {...this.state}
+            computeBoard={this.computeBoard}
+            handleHumanMove={this.handleHumanMove}
+            handleComputerMove={this.handleComputerMove}
+          />
         </ContentWrapper>
       </AppWrapper>
     );
