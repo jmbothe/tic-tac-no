@@ -4,6 +4,7 @@ import styled from 'styled-components';
 const TileWrapper = styled.button`
   width: 33.333%;
   height: 33.333%;
+  padding: 0;
   background: transparent;
   border: 1px solid black;
   border-top: ${props => (props.index > 2 ? '1px solid black' : 'none')};
@@ -20,7 +21,7 @@ const Tile = props => (
   <TileWrapper
     {...props}
     onClick={() => props.handleHumanMove(props.index)}
-    disabled={props.loading || !props.inPlay}
+    disabled={props.occupied || props.loading || !props.inPlay}
   >
     {props.occupied}
   </TileWrapper>

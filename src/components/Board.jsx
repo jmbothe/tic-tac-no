@@ -1,14 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Message, Icon } from 'semantic-ui-react';
 
 import Tile from './Tile.jsx';
 
-const BoardWrapper = styled.div`
+const BoardWrapper = styled.section`
   position: relative;
   display: flex;
-  justify-content: center;
-  align-items: center;
   width: 100%;
 
   &::after {
