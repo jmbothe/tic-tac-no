@@ -8,6 +8,7 @@ import {
   getWinner,
 } from 'src/game/tic_tac_toe.js';
 import { getBestMove } from 'src/game/perfect_player.js';
+import {PRIMARY_TEXT} from 'src/styleConstants.js';
 import Settings from './Settings.jsx';
 import Board from './Board.jsx';
 import Header from './Header.jsx';
@@ -18,17 +19,22 @@ const AppWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-height: 100vh;
+  color: ${PRIMARY_TEXT};
 `;
 
 const ContentWrapper = styled.main`
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
   width: 100%;
+  padding-top: 2rem;
 
   @media (orientation: landscape) {
     flex-direction: row;
     justify-content: space-around;
-    max-width: 1080px;
+    align-items: center;
+    max-width: 960px;
   }
 `;
 

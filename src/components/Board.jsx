@@ -15,6 +15,7 @@ const BoardWrapper = styled.section`
   }
 
   @media(orientation: landscape) {
+    width: 50%;
     max-width: 480px;
   }
 `;
@@ -25,7 +26,7 @@ const Board = styled.div`
   flex-wrap: wrap;
   width: 100%;
   height: 100%;
-  padding: 2rem;
+  padding: 1rem 1rem;
 `;
 
 const Game = props => (

@@ -1,20 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import {PRIMARY_COLOR_DARK, ACCENT_COLOR, PRIMARY_TEXT} from '../styleConstants';
+
+
 const TileWrapper = styled.button`
   width: 33.333%;
   height: 33.333%;
   padding: 0;
   background: transparent;
-  border: 1px solid black;
-  border-top: ${props => (props.index > 2 ? '1px solid black' : 'none')};
-  border-bottom: ${props => (props.index < 6 ? '1px solid black' : 'none')};
-  border-left: ${props => (props.index % 3 === 0 ? 'none' : '1px solid black')};
+  border-top: ${props => (props.index > 2 ? `1px solid ${PRIMARY_TEXT}` : 'none')};
+  border-bottom: ${props => (props.index < 6 ? `1px solid ${PRIMARY_TEXT}` : 'none')};
+  border-left: ${props => (props.index % 3 === 0 ? 'none' : `1px solid ${PRIMARY_TEXT}`)};
   border-right: ${props =>
-    (props.index - 2) % 3 === 0 ? 'none' : '1px solid black'};
+    (props.index - 2) % 3 === 0 ? 'none' : `1px solid ${PRIMARY_TEXT}`};
   font-family: "Bowlby One SC", cursive;
-  font-size: 3rem;
-  color: ${props => (props.occupied === 'X' ? 'red' : 'blue')};
+  font-size: 5rem;
+  color: ${props => (props.occupied === 'X' ? ACCENT_COLOR : PRIMARY_COLOR_DARK)};
 `;
 
 const Tile = props => (

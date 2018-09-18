@@ -1,9 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import {PRIMARY_COLOR, PRIMARY_COLOR_DARK, PRIMARY_COLOR_LIGHT} from '../styleConstants';
+
+
 const HeaderWrapper = styled.header`
-  padding: 2rem 1rem;
+  padding: 1rem;
   width: 100%;
+  background-color: ${PRIMARY_COLOR};
+  color: #fff;
+  border-top: 10px solid ${PRIMARY_COLOR_DARK};
   box-shadow: 0 0 20px 4px #ddd;
 `;
 
@@ -13,6 +19,8 @@ const H1 = styled.h1`
 
 const H2 = styled.h2`
   text-align: center;
+  font-size: 1.25rem;
+  color: ${PRIMARY_COLOR_LIGHT};
 `;
 
 const Header = () => (

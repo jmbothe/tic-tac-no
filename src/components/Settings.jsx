@@ -1,14 +1,26 @@
 import React from 'react';
 import styled from 'styled-components';
 import {
-  Radio, Form, Button, Message, Icon,
+  Radio, Form, Button, Icon,
 } from 'semantic-ui-react';
 
 const SettingsWrapper = styled.section`
   display: flex;
   flex-direction: column;
-  padding: 2rem 2rem 0;
-  flex-grow: 1;
+  width: 100%;
+  padding: 1rem 1rem 0;
+
+  @media(orientation: landscape) {
+    width: 50%;
+  }
+`;
+
+const MessageWrapper = styled.div`
+  padding: 3rem 0;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  font-size: 1rem;
 `;
 
 const Settings = props => (
@@ -32,17 +44,20 @@ const Settings = props => (
         />
       </Form.Field>
       <Form.Field>
-        <Button onClick={() => props.toggleInPlay()}>
+        <Button color={props.inPlay ? 'pink' : 'blue'} onClick={() => props.toggleInPlay()}>
           {props.inPlay ? 'Quit Game' : 'Start Game'}
         </Button>
       </Form.Field>
     </Form>
-    <Message icon>
-      <Icon name="circle notched" loading={props.loading} />
-      <Message.Content>
-        {props.message}
-      </Message.Content>
-    </Message>
+    <MessageWrapper>
+      <Icon
+        name="circle notched"
+        size="huge"
+        loading={props.loading}
+        color={!props.inPlay ? 'black' : props.game.activePlayer === 'X' ? 'pink' : 'blue'}
+      />
+        <span>{props.message}</span>
+    </MessageWrapper>
   </SettingsWrapper>
 );
 
