@@ -8,5 +8,3 @@ import './css/main.css';
 import App from './components/App.jsx';
 
 render(<App />, document.getElementById('root'));
-
-module.hot.accept();

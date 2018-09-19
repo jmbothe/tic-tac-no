@@ -40,6 +40,11 @@ module.exports = {
     ],
   },
 
+  // watch: true,
+  // watchOptions: {
+  //   poll: 1000,
+  // },
+
   devServer: {
     contentBase: path.resolve(__dirname, 'build'),
     compress: true,
@@ -47,8 +52,6 @@ module.exports = {
     port: 3000,
     hot: true,
     stats: 'errors-only',
-    open: true,
-    historyApiFallback: true,
   },
 
   module: {
