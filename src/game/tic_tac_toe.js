@@ -18,17 +18,33 @@ const initialGameState = {
   },
 };
 
-// Used for creating hypothetical states within the minimax algorithm
-// AND for mutating that actual game state
+/*
+Used for creating hypothetical states within the minimax algorithm
+AND for mutating that actual game state.
+This method of deep copying turned out to be more performant
+than using update() from immutability helper, or JSON.parse(JSON.stringify)
+*/
 function generateNextGameState(gameState, move) {
-  // Interestingly, this method of deep copying turned out to be more performant
-  // Than using update() from immutability helper.
-  const newState = JSON.parse(JSON.stringify(gameState));
-
-  newState.players[newState.activePlayer].moves.push(move);
-
-  [newState.activePlayer, newState.waitingPlayer] = [newState.waitingPlayer, newState.activePlayer];
-  return newState;
+  return {
+    activePlayer: gameState.waitingPlayer,
+    waitingPlayer: gameState.activePlayer,
+    players: {
+      X: {
+        moves: gameState.activePlayer === 'X'
+          ? gameState.players.X.moves.concat([move])
+          : gameState.players.X.moves,
+        isHuman: gameState.players.X.isHuman,
+        symbol: 'X',
+      },
+      O: {
+        moves: gameState.activePlayer === 'O'
+          ? gameState.players.O.moves.concat([move])
+          : gameState.players.O.moves,
+        isHuman: gameState.players.O.isHuman,
+        symbol: 'O',
+      },
+    },
+  };
 }
 
 function getAvailableMoves(...unavailableMoves) {
@@ -36,7 +52,9 @@ function getAvailableMoves(...unavailableMoves) {
     .filter(move => unavailableMoves.indexOf(move) < 0);
 }
 
-function checkForWin({ moves }) {
+function checkForWin({
+  moves,
+}) {
   return WINNING_PATTERNS.some(pattern =>
     pattern.every(move => moves.includes(move)));
 }
