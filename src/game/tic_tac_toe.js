@@ -17,9 +17,12 @@ const initialGameState = {
     },
   },
 };
+
 // Used for creating hypothetical states within the minimax algorithm
 // AND for mutating that actual game state
 function generateNextGameState(gameState, move) {
+  // Interestingly, this method of deep copying turned out to be more performant
+  // Than using update() from immutability helper.
   const newState = JSON.parse(JSON.stringify(gameState));
 
   newState.players[newState.activePlayer].moves.push(move);
