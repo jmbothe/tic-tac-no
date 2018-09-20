@@ -40,10 +40,10 @@ module.exports = {
     ],
   },
 
-  // watch: true,
-  // watchOptions: {
-  //   poll: 1000,
-  // },
+  watch: true,
+  watchOptions: {
+    poll: 1000,
+  },
 
   devServer: {
     contentBase: path.resolve(__dirname, 'build'),
@@ -67,9 +67,9 @@ module.exports = {
       {
         test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
         use: {
-          loader: 'url-loader',
+          loader: 'file-loader',
           options: {
-            limit: 100000,
+            name: '[name].[ext]',
           },
         },
       },
