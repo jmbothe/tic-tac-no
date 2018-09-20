@@ -33,6 +33,7 @@ const Settings = props => (
           onChange={() => props.toggleSentience('X')}
           checked={!props.game.players.X.isHuman}
           label={`Player X is ${props.game.players.X.isHuman ? 'human' : 'AI'}`}
+          disabled={props.inPlay}
         />
       </Form.Field>
       <Form.Field>
@@ -41,6 +42,7 @@ const Settings = props => (
           onChange={() => props.toggleSentience('O')}
           checked={!props.game.players.O.isHuman}
           label={`Player O is ${props.game.players.O.isHuman ? 'human' : 'AI'}`}
+          disabled={props.inPlay}
         />
       </Form.Field>
       <Form.Field>
