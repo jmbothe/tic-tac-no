@@ -1,6 +1,11 @@
 {
   "presets": [
-    ["env", {"modules": false}],
+    ["env", {
+      "modules": false,
+      "targets": {
+        "browsers": "> 5%"
+      }
+    }],
     "react",
     "stage-0"
   ],
