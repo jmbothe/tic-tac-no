@@ -56,7 +56,7 @@ class App extends Component {
       && this.state.inPlay
       && !this.state.game.players[this.state.game.activePlayer].isHuman
     ) {
-      setTimeout(
+      computerMoveTimeout = setTimeout(
         () => this.handleMove(Math.floor(Math.random() * Math.floor(9))),
         3000,
       );
