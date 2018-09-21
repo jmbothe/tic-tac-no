@@ -7,7 +7,7 @@ import {
   checkForGameOver,
   getWinner,
 } from 'src/game/tic_tac_toe.js';
-import { getBestMove } from 'src/game/perfect_player.js';
+import getBestMove from 'src/game/perfect_player.js';
 import { PRIMARY_TEXT } from 'src/styleConstants.js';
 import Settings from './Settings.jsx';
 import Board from './Board.jsx';
