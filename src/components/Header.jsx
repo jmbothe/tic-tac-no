@@ -1,8 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import {PRIMARY_COLOR, PRIMARY_COLOR_DARK, PRIMARY_COLOR_LIGHT} from '../styleConstants';
-
+import {
+  PRIMARY_COLOR,
+  PRIMARY_COLOR_DARK,
+  PRIMARY_COLOR_LIGHT,
+} from '../styleConstants';
 
 const HeaderWrapper = styled.header`
   padding: 1rem;
@@ -26,9 +29,7 @@ const H2 = styled.h2`
 const Header = () => (
   <HeaderWrapper>
     <H1>Tic Tac NO!</H1>
-    <H2>
-      The classic game of strategy, featuring an unbeatable AI opponent.
-    </H2>
+    <H2>The classic game of strategy, featuring an unbeatable AI opponent.</H2>
   </HeaderWrapper>
 );
 

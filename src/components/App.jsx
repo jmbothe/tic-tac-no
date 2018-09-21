@@ -8,12 +8,10 @@ import {
   getWinner,
 } from 'src/game/tic_tac_toe.js';
 import { getBestMove } from 'src/game/perfect_player.js';
-import {PRIMARY_TEXT} from 'src/styleConstants.js';
+import { PRIMARY_TEXT } from 'src/styleConstants.js';
 import Settings from './Settings.jsx';
 import Board from './Board.jsx';
 import Header from './Header.jsx';
-
-let computerMoveTimeout;
 
 const AppWrapper = styled.div`
   display: flex;
@@ -38,6 +36,9 @@ const ContentWrapper = styled.main`
   }
 `;
 
+let computerMoveTimeout;
+export const { Provider, Consumer } = React.createContext();
+
 class App extends Component {
   state = {
     game: initialGameState,
@@ -47,38 +48,44 @@ class App extends Component {
     message: 'Choose your settings and then start the game.',
   };
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.inPlay !== prevState.inPlay) {
-      if (this.state.inPlay) {
-        if (!this.state.game.players[this.state.game.activePlayer].isHuman) {
-          this.handleHumanMove(Math.floor(Math.random() * Math.floor(9)));
-        }
-      }
+  componentDidUpdate(_, prevState) {
+    // If first move is from AI player, make a random move
+    // to make viewing the game more interesting for humans
+    if (
+      this.state.inPlay !== prevState.inPlay
+      && this.state.inPlay
+      && !this.state.game.players[this.state.game.activePlayer].isHuman
+    ) {
+      setTimeout(
+        () => this.handleMove(Math.floor(Math.random() * Math.floor(9))),
+        3000,
+      );
+
+    // Render all other AI moves
     } else if (
       this.state.game.activePlayer !== prevState.game.activePlayer
       && !this.state.game.players[this.state.game.activePlayer].isHuman
       && !this.state.winner
       && this.state.inPlay
     ) {
-      computerMoveTimeout = setTimeout(() => this.handleComputerMove(), 3000);
+      computerMoveTimeout = setTimeout(() => this.handleMove(), 3000);
     }
   }
 
-  toggleSentience = player => {
-    this.setState(prevState => {
-      const game = update(prevState.game, {
+  toggleSentience = player =>
+    this.setState(prevState => ({
+      game: update(prevState.game, {
         players: {
           [player]: {
-            isHuman: { $set: !prevState.game.players[player].isHuman },
+            $toggle: ['isHuman'],
           },
         },
-      });
-      return { game };
-    });
-  };
+      }),
+    }));
 
   toggleInPlay = () => {
     this.setState(prevState => {
+      const activePlayer = prevState.game.players[prevState.game.activePlayer];
       const game = update(prevState.game, {
         activePlayer: {
           $set: 'X',
@@ -113,73 +120,45 @@ class App extends Component {
       }
       return {
         game,
+        loading: !activePlayer.isHuman,
         winner: undefined,
         inPlay: true,
-        message: prevState.game.players[prevState.game.activePlayer].isHuman ? `Player ${prevState.game.players[prevState.game.activePlayer].symbol} please make your move...` : `Player ${prevState.game.players[prevState.game.activePlayer].symbol} is making her move...`,
+        message: activePlayer.isHuman
+          ? `Player ${activePlayer.symbol} please make your move...`
+          : `Player ${activePlayer.symbol} is making her move...`,
       };
     });
   };
 
-  handleHumanMove = move => {
-    this.setState(prevState => {
-      const nextGameState = generateNextGameState(prevState.game, move);
-      if (checkForGameOver(nextGameState)) {
-        const winner = getWinner(nextGameState);
-        const game = update(nextGameState, {
-          activePlayer: {
-            $set: 'X',
-          },
-          waitingPlayer: {
-            $set: 'O',
-          },
-        });
-
-        return {
-          game,
-          winner: winner || 'Nobody',
-          message: `${winner
-            || 'Nobody'} has won! Adjust your settings or play again!`,
-          inPlay: false,
-        };
-      }
-      return {
-        game: nextGameState,
-        loading: !nextGameState.players[nextGameState.activePlayer].isHuman,
-        message: nextGameState.players[nextGameState.activePlayer].isHuman ? `Player ${nextGameState.players[nextGameState.activePlayer].symbol} please make your move...` : `Player ${nextGameState.players[nextGameState.activePlayer].symbol} is making her move...`,
-      };
-    });
-  };
-
-  handleComputerMove = () => {
+  // If activePlayer is AI, `move` param should be undefined
+  handleMove = move => {
     this.setState(prevState => {
       const nextGameState = generateNextGameState(
         prevState.game,
-        getBestMove(prevState.game, JSON.parse(JSON.stringify(prevState.game))),
+        move
+        // If move is undefined, run minmax algorithm to get best move
+          || getBestMove(
+            prevState.game,
+            JSON.parse(JSON.stringify(prevState.game)),
+          ),
       );
       if (checkForGameOver(nextGameState)) {
-        const winner = getWinner(nextGameState);
-        const game = update(nextGameState, {
-          activePlayer: {
-            $set: 'X',
-          },
-          waitingPlayer: {
-            $set: 'O',
-          },
-        });
+        const winner = getWinner(nextGameState) || 'Nobody';
 
         return {
-          game,
-          winner: winner || 'Nobody',
-          loading: false,
-          message: `${winner
-            || 'Nobody'} has won! Adjust your settings or play again!`,
+          game: nextGameState,
           inPlay: false,
+          winner,
+          message: `${winner} has won! Adjust your settings or play again!`,
         };
       }
+      const activePlayer = nextGameState.players[nextGameState.activePlayer];
       return {
         game: nextGameState,
-        loading: !nextGameState.players[nextGameState.activePlayer].isHuman,
-        message: nextGameState.players[nextGameState.activePlayer].isHuman ? `Player ${nextGameState.players[nextGameState.activePlayer].symbol} please make your move...` : `Player ${nextGameState.players[nextGameState.activePlayer].symbol} is making her move...`,
+        loading: !activePlayer.isHuman,
+        message: activePlayer.isHuman
+          ? `Player ${activePlayer.symbol} please make your move...`
+          : `Player ${activePlayer.symbol} is making her move...`,
       };
     });
   };
@@ -196,22 +175,23 @@ class App extends Component {
 
   render() {
     return (
-      <AppWrapper>
-        <Header />
-        <ContentWrapper>
-          <Settings
-            {...this.state}
-            toggleSentience={this.toggleSentience}
-            toggleInPlay={this.toggleInPlay}
-          />
-          <Board
-            {...this.state}
-            computeBoard={this.computeBoard}
-            handleHumanMove={this.handleHumanMove}
-            handleComputerMove={this.handleComputerMove}
-          />
-        </ContentWrapper>
-      </AppWrapper>
+      <Provider
+        value={{
+          ...this.state,
+          handleMove: this.handleMove,
+          toggleInPlay: this.toggleInPlay,
+          toggleSentience: this.toggleSentience,
+          computeBoard: this.computeBoard,
+        }}
+      >
+        <AppWrapper>
+          <Header />
+          <ContentWrapper>
+            <Settings />
+            <Board />
+          </ContentWrapper>
+        </AppWrapper>
+      </Provider>
     );
   }
 }

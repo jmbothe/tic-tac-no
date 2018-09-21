@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-
+import { Consumer } from 'src/components/App.jsx';
 import Tile from './Tile.jsx';
 
 const BoardWrapper = styled.section`
@@ -29,14 +29,18 @@ const Board = styled.div`
   padding: 1rem 1rem;
 `;
 
-const Game = props => (
-  <BoardWrapper>
-    <Board>
-      {props.computeBoard().map((tile, index) => (
-        <Tile {...props} occupied={tile} index={index} key={index} />
-      ))}
-    </Board>
-  </BoardWrapper>
+const Game = () => (
+  <Consumer>
+    {({ computeBoard }) => (
+      <BoardWrapper>
+        <Board>
+          {computeBoard().map((tile, index) => (
+            <Tile occupied={tile} index={index} key={index} />
+          ))}
+        </Board>
+      </BoardWrapper>
+    )}
+  </Consumer>
 );
 
 export default Game;
