@@ -21,7 +21,7 @@ const AppWrapper = styled.div`
   color: ${PRIMARY_TEXT};
 `;
 
-const ContentWrapper = styled.main`
+const MainWrapper = styled.main`
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -189,10 +189,10 @@ class App extends Component {
       >
         <AppWrapper>
           <Header />
-          <ContentWrapper>
+          <MainWrapper>
             <Settings />
             <Board />
-          </ContentWrapper>
+          </MainWrapper>
         </AppWrapper>
       </Provider>
     );
