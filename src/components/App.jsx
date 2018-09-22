@@ -85,7 +85,6 @@ class App extends Component {
 
   toggleInPlay = () => {
     this.setState(prevState => {
-      const activePlayer = prevState.game.players[prevState.game.activePlayer];
       const game = update(prevState.game, {
         activePlayer: {
           $set: 'X',
@@ -118,6 +117,9 @@ class App extends Component {
           message: 'Choose your settings and then start the game.',
         };
       }
+      // Player X always goes first...
+      const activePlayer = prevState.game.players.X;
+
       return {
         game,
         loading: !activePlayer.isHuman,
@@ -148,6 +150,7 @@ class App extends Component {
         return {
           game: nextGameState,
           inPlay: false,
+          loading: false,
           winner,
           message: `${winner} has won! Adjust your settings or play again!`,
         };
