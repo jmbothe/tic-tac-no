@@ -14,7 +14,7 @@ const BoardWrapper = styled.section`
     padding-bottom: 100%;
   }
 
-  @media(orientation: landscape) {
+  @media (orientation: landscape) {
     width: 50%;
     max-width: 480px;
   }
@@ -31,8 +31,15 @@ const Board = styled.div`
 
 const Game = () => (
   <Consumer>
-    {({ computeBoard }) => (
-      <BoardWrapper>
+    {({ inPlay, computeBoard }) => (
+      <BoardWrapper
+        tabIndex="0"
+        aria-label={`Game Board. ${
+          !inPlay
+            ? 'Game is not in play, tiles are disabled. Start game to enable tiles'
+            : ''
+        }`}
+      >
         <Board>
           {computeBoard().map((tile, index) => (
             <Tile occupied={tile} index={index} key={index} />

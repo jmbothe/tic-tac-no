@@ -29,8 +29,15 @@ const Settings = () => (
     {({
       game, inPlay, loading, message, toggleSentience, toggleInPlay,
     }) => (
-      <SettingsWrapper>
-        <Form>
+      <SettingsWrapper
+        tabIndex="0"
+        aria-label={`Game settings. ${
+          inPlay
+            ? 'Game is in play. Settings are disabled. Quit game to change settings'
+            : ''
+        }`}
+      >
+        <Form id="settings-form">
           <h3>Settings</h3>
           <Form.Field>
             <Radio
@@ -38,7 +45,11 @@ const Settings = () => (
               onChange={() => toggleSentience('X')}
               checked={!game.players.X.isHuman}
               label={`Player X is ${game.players.X.isHuman ? 'human' : 'AI'}`}
+              aria-label={`Toggle player X sentience. Player X is ${
+                game.players.X.isHuman ? 'human' : 'AI'
+              }`}
               disabled={inPlay}
+              htmlFor="settings-form"
             />
           </Form.Field>
           <Form.Field>
@@ -47,11 +58,20 @@ const Settings = () => (
               onChange={() => toggleSentience('O')}
               checked={!game.players.O.isHuman}
               label={`Player O is ${game.players.O.isHuman ? 'human' : 'AI'}`}
+              aria-label={`Toggle player O sentience. Player O is ${
+                game.players.O.isHuman ? 'human' : 'AI'
+              }`}
               disabled={inPlay}
+              htmlFor="settings-form"
             />
           </Form.Field>
           <Form.Field>
-            <Button color={inPlay ? 'pink' : 'blue'} onClick={toggleInPlay}>
+            <Button
+              color={inPlay ? 'pink' : 'blue'}
+              onClick={toggleInPlay}
+              type="submit"
+              htmlFor="settings-form"
+            >
               {inPlay ? 'Quit Game' : 'Start Game'}
             </Button>
           </Form.Field>
@@ -67,7 +87,7 @@ const Settings = () => (
               || 'blue'
             }
           />
-          <span>{message}</span>
+          <span tabIndex="0">{message}</span>
         </MessageWrapper>
       </SettingsWrapper>
     )}

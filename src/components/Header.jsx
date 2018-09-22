@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import {
   PRIMARY_COLOR,
   PRIMARY_COLOR_DARK,
-  PRIMARY_COLOR_LIGHT,
 } from '../styleConstants';
 
 const HeaderWrapper = styled.header`
@@ -23,7 +22,7 @@ const H1 = styled.h1`
 const H2 = styled.h2`
   text-align: center;
   font-size: 1.25rem;
-  color: ${PRIMARY_COLOR_LIGHT};
+  color: #fff;
 `;
 
 const Header = () => (

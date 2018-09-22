@@ -34,6 +34,9 @@ const Tile = ({ occupied, index }) => (
         occupied={occupied}
         onClick={() => handleMove(index)}
         disabled={occupied || loading || !inPlay}
+        aria-label={`Board tile position ${index}, ${
+          occupied ? `occupied by player ${occupied}` : 'unoccupied.'
+        }`}
       >
         {occupied}
       </TileWrapper>

@@ -126,8 +126,8 @@ class App extends Component {
         winner: undefined,
         inPlay: true,
         message: activePlayer.isHuman
-          ? `Player ${activePlayer.symbol} please make your move...`
-          : `Player ${activePlayer.symbol} is making her move...`,
+          ? `Player ${activePlayer.symbol} please make your move.`
+          : `Player ${activePlayer.symbol} is making her move.`,
       };
     });
   };
@@ -160,8 +160,8 @@ class App extends Component {
         game: nextGameState,
         loading: !activePlayer.isHuman,
         message: activePlayer.isHuman
-          ? `Player ${activePlayer.symbol} please make your move...`
-          : `Player ${activePlayer.symbol} is making her move...`,
+          ? `Player ${activePlayer.symbol} please make your move.`
+          : `Player ${activePlayer.symbol} is making her move.`,
       };
     });
   };
