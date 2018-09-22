@@ -37,9 +37,7 @@ const Settings = () => (
               toggle
               onChange={() => toggleSentience('X')}
               checked={!game.players.X.isHuman}
-              label={`Player X is ${
-                game.players.X.isHuman ? 'human' : 'AI'
-              }`}
+              label={`Player X is ${game.players.X.isHuman ? 'human' : 'AI'}`}
               disabled={inPlay}
             />
           </Form.Field>
@@ -48,17 +46,12 @@ const Settings = () => (
               toggle
               onChange={() => toggleSentience('O')}
               checked={!game.players.O.isHuman}
-              label={`Player O is ${
-                game.players.O.isHuman ? 'human' : 'AI'
-              }`}
+              label={`Player O is ${game.players.O.isHuman ? 'human' : 'AI'}`}
               disabled={inPlay}
             />
           </Form.Field>
           <Form.Field>
-            <Button
-              color={inPlay ? 'pink' : 'blue'}
-              onClick={toggleInPlay}
-            >
+            <Button color={inPlay ? 'pink' : 'blue'} onClick={toggleInPlay}>
               {inPlay ? 'Quit Game' : 'Start Game'}
             </Button>
           </Form.Field>
@@ -69,11 +62,9 @@ const Settings = () => (
             size="huge"
             loading={loading}
             color={
-              !inPlay
-                ? 'black'
-                : game.activePlayer === 'X'
-                  ? 'pink'
-                  : 'blue'
+              (!inPlay && 'black')
+              || (game.activePlayer === 'X' && 'pink')
+              || 'blue'
             }
           />
           <span>{message}</span>
