@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import {
-  Radio, Form, Button, Icon,
-} from 'semantic-ui-react';
+  Checkbox, Form, Button, Icon,
+} from 'semantic-ui-react/src';
 import { Consumer } from 'src/components/App.jsx';
 
 const SettingsWrapper = styled.section`
@@ -29,38 +29,35 @@ const Settings = () => (
     {({
       game, inPlay, loading, message, toggleSentience, toggleInPlay,
     }) => (
-      <SettingsWrapper
-        tabIndex="0"
-        aria-label={`Game settings. ${
-          inPlay
-            ? 'Game is in play. Settings are disabled. Quit game to change settings'
-            : ''
-        }`}
-      >
-        <Form id="settings-form">
+      <SettingsWrapper>
+        <Form
+          id="settings-form"
+          tabIndex="0"
+          aria-label={`Game settings. ${
+            inPlay
+              ? 'Game is in play. Settings are disabled. Quit game to change settings'
+              : ''
+          }`}
+        >
           <h3>Settings</h3>
           <Form.Field>
-            <Radio
+            <Checkbox
               toggle
               onChange={() => toggleSentience('X')}
               checked={!game.players.X.isHuman}
               label={`Player X is ${game.players.X.isHuman ? 'human' : 'AI'}`}
-              aria-label={`Toggle player X sentience. Player X is ${
-                game.players.X.isHuman ? 'human' : 'AI'
-              }`}
+              aria-label="Toggle player X artificial intelligence."
               disabled={inPlay}
               htmlFor="settings-form"
             />
           </Form.Field>
           <Form.Field>
-            <Radio
+            <Checkbox
               toggle
               onChange={() => toggleSentience('O')}
               checked={!game.players.O.isHuman}
               label={`Player O is ${game.players.O.isHuman ? 'human' : 'AI'}`}
-              aria-label={`Toggle player O sentience. Player O is ${
-                game.players.O.isHuman ? 'human' : 'AI'
-              }`}
+              aria-label="Toggle player O artificial intelligence."
               disabled={inPlay}
               htmlFor="settings-form"
             />

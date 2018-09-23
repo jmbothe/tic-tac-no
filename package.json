@@ -16,7 +16,7 @@
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "semantic-ui-css": "^2.3.3",
-    "semantic-ui-react": "^0.82.5",
+    "semantic-ui-react": "git+https://github.com/Semantic-Org/Semantic-Ui-React.git#fix/checkbox-spacebar",
     "styled-components": "^3.4.6"
   },
   "devDependencies": {
